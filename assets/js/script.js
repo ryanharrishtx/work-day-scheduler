@@ -12,6 +12,7 @@ $(function () {
   })
   }, 1000);
 
+  // Set time-block class based on current time
   function setTimeBlockClass() {
   const currentHour = dayjs().format("H");
   console.log(currentHour);
@@ -20,7 +21,7 @@ $(function () {
     const timeBlock = $(timeBlocks[i]);
     const timeBlockHour = parseInt(timeBlock.attr("id").split("-")[1]);
     console.log(timeBlockHour);
-    if (timeBlockHour === currentHour) {
+    if (timeBlockHour == currentHour) {
       timeBlock.addClass("present");
     } else if (timeBlockHour < currentHour) {
       timeBlock.addClass("past");
@@ -30,56 +31,44 @@ $(function () {
   }
 }
 
-  // Set time-block class based on current time
-  // function setTimeBlockClass() {
-  //   const currentHour = dayjs();
-  //   console.log(currentHour);
+function saveInput() {
+  const userInput = $(this).siblings(".description").val();
+  const timeBlockId = $(this).parent().attr("id");
+  const timeBlock = $(this);
 
-  //   timeBlocks.each(function () {
-  //     const timeBlock = $(this);
-  //     const timeBlockHour = parseInt(timeBlock.attr("id").split("-")[1]);
+  localStorage.setItem(timeBlockId, userInput); // Store the user input
 
-  //     if (timeBlockHour === currentHour) {
-  //       timeBlock.addClass("present");
-  //     } else if (timeBlockHour < currentHour) {
-  //       timeBlock.addClass("past");
-  //     } else {
-  //       timeBlock.addClass("future");
-  //     }
-  //   });
-  // }
+  // Set the value of the textarea within the time block to the user input
+  timeBlock.siblings(".description").val(userInput);
+}
+
 
   // Get user input from local storage and set textarea value
-  // function setSavedInput() {
-  //   textArea.each(function () {
-  //     const timeBlock = $(this);
-  //     const timeBlockId = timeBlock.attr("id");
-  //     const savedInput = localStorage.getItem(timeBlockId);
+  function setSavedInput() {
+    textArea.each(function () {
+      const timeBlock = $(this);
+      const timeBlockId = $(this).parent().attr("id");
+      const savedInput = localStorage.getItem(timeBlockId, saveInput);
 
-  //     if (savedInput) {
-  //       timeBlock.val(savedInput);
-  //     }
-  //   });
-  // }
+      if (savedInput !== null) {
+        timeBlock.val(savedInput);
+      }
 
-  // Save user input to local storage
-  function saveInput() {
-    const timeBlockId = $(this).parent().attr("id");
-    const userInput = $(this).siblings(".description").val();
-
-    localStorage.setItem(timeBlockId, userInput);
+      console.log(savedInput);
+    });
   }
 
-  // Set time-block class and saved user input on page load
-  setTimeBlockClass();
-  // setSavedInput();
 
   // Add click event listener to save button
   saveBtn.on("click", saveInput);
+
+  // Set time-block class and saved user input on page load
+  setTimeBlockClass();
+  setSavedInput();
 
   // Update time-block class every 5 minutes
   setInterval(setTimeBlockClass, 300000);
 
   // Update saved user input every 5 minutes
-  // setInterval(setSavedInput, 300000);
+  setInterval(setSavedInput, 300000);
 
