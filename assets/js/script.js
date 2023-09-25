@@ -31,44 +31,35 @@ $(function () {
   }
 }
 
-function saveInput() {
-  const userInput = $(this).siblings(".description").val();
-  const timeBlockId = $(this).parent().attr("id");
-  const timeBlock = $(this);
+  function saveInput() {
+    const userInput = $(this).siblings(".description").val();
+    const timeBlockId = $(this).parent().attr("id");
+    const timeBlock = $(this);
+    const saveInput = localStorage.setItem(timeBlockId, userInput);
 
-  localStorage.setItem(timeBlockId, userInput); // Store the user input
+    if (saveInput !== null) {
+      timeBlock.val(saveInput);
+    }
 
-  // Set the value of the textarea within the time block to the user input
-  timeBlock.siblings(".description").val(userInput);
-}
-
-
-  // Get user input from local storage and set textarea value
-  function setSavedInput() {
-    textArea.each(function () {
-      const timeBlock = $(this);
-      const timeBlockId = $(this).parent().attr("id");
-      const savedInput = localStorage.getItem(timeBlockId, saveInput);
-
-      if (savedInput !== null) {
-        timeBlock.val(savedInput);
-      }
-
-      console.log(savedInput);
-    });
   }
 
+//Get user input from local storage and set textarea value
+function setSavedInput() {
+  for (let i = 9; i < 17; i++){
+    $(`#hour-${i} .description`).val(localStorage.getItem(`hour-${i}`))
+  }
 
+}
   // Add click event listener to save button
-  saveBtn.on("click", saveInput);
+saveBtn.on("click", saveInput);
 
-  // Set time-block class and saved user input on page load
-  setTimeBlockClass();
-  setSavedInput();
+// Set time-block class and saved user input on page load
+setTimeBlockClass();
+setSavedInput();
 
-  // Update time-block class every 5 minutes
-  setInterval(setTimeBlockClass, 300000);
+// Update time-block class every 5 minutes
+setInterval(setTimeBlockClass, 300000);
 
-  // Update saved user input every 5 minutes
-  setInterval(setSavedInput, 300000);
+// Update saved user input every 5 minutes
+setInterval(setSavedInput, 300000);
 
