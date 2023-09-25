@@ -48,7 +48,6 @@ function setSavedInput() {
   for (let i = 9; i < 17; i++){
     $(`#hour-${i} .description`).val(localStorage.getItem(`hour-${i}`))
   }
-
 }
   // Add click event listener to save button
 saveBtn.on("click", saveInput);
